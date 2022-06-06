@@ -1,5 +1,5 @@
 var fundo;
-var homem, homemImage;
+var homem, homemRunImage, homemImage, homemShootingImage;
 var barreira;
 var limiteDeChao;
 var zumbiImg, zumbiGroup, bulletGroup;
@@ -11,8 +11,10 @@ var gameState = "play";
 //executa 1 vez só:
 function preload() {
   fundo = loadImage("assets/tela de fundo.gif");
-  homemImage = loadImage("assets/shooter_2.png");
-  zumbiImg = loadImage("assets/zombie.png");
+  homemImage = loadAnimation("assets/parado.png")
+  homemRunImage = loadAnimation("assets/correndo1.png", "assets/correndo2.png");
+  homemShootingImage = loadAnimation("assets/atirando1.png", "assets/atirando2.png")
+  zumbiImg = loadImage("assets/zumbi.png");
   explosionSound = loadSound("assets/explosion.mp3");
   lose = loadSound("assets/lose.mp3");
   winning = loadSound("assets/win.mp3");
@@ -22,7 +24,7 @@ function preload() {
 function setup() {
   createCanvas(windowWidth, windowHeight);
   homem = createSprite(140, height - 300, 30, 100);
-  homem.addImage("normal", homemImage);
+  homem.addAnimation("normal", homemImage);
   homem.scale = 1.0;
   homem.setCollider(
     "rectangle",
@@ -42,8 +44,8 @@ function draw() {
   image(fundo, 0, 0, width, height);
   textSize(20);
   fill("white");
-  console.log(gameState)
-  text("Pontuação = " + score, displayWidth - 200, 200);
+
+  text("Pontuação = " + score, displayWidth - displayWidth*0.10, 200);
   if(gameState == "play") {
     if (score == 100) {
       winning.play();
@@ -125,7 +127,6 @@ function createZumbis() {
       zumbi.addImage(zumbiImg);
     }
 
-    zumbi.scale = 0.4;
     zumbi.lifetime = width / zumbi.velocityX;
     zumbiGroup.add(zumbi);
   }
@@ -134,7 +135,6 @@ function createZumbis() {
 function zumbiDestroy() {
   if (zumbiGroup.isTouching(bulletGroup)) {
     for (var i = 0; i < zumbiGroup.length; i++) {
-     
     }
   }
 }
